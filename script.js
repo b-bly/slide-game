@@ -5,15 +5,19 @@
 //add numbers
 //randomly generate board
 
-let game;
+let game, gameBoard;
 
 function startGame() {
     game = new Game();
     game.start();
     //let text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
-    let gameBoard = new Board(PIECES_PER_SIDE);
+    gameBoard = new Board(PIECES_PER_SIDE);
     console.log('board piecesArray');
     console.log(gameBoard.piecesArray);
+    console.log('clicked');
+    console.log(gameBoard.piecesArray[1].clicked());
+    
+    
 }
 
 //window.onload = function () {

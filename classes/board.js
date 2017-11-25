@@ -3,11 +3,11 @@ class Board {
         this.piecesPerSide = piecesPerSide;
         this.totalPieces = Math.pow(this.piecesPerSide, 2);
         this.piecesArray = [];
+        this.emptySquare = {};
         this.draw();
     }
     draw() {
         const emptySquare = Math.floor(Math.random() * this.totalPieces);
-
         
         for (let j = 0; j < this.piecesPerSide; j++) {
             for (let i = 0; i < this.piecesPerSide; i++) {
@@ -19,9 +19,10 @@ class Board {
                 let piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
                     x, y, number, empty);
                 this.piecesArray.push(piece);
+                if (empty) this.emptySquare = piece;
                 if (empty == false) {
                     piece.update();
-                }
+                } 
             }
         }
     }
