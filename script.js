@@ -4,20 +4,17 @@
 //one empty square
 //add numbers
 //randomly generate board
+//clickable squares
+//move clicked square to empty space if it is adjacent to it.
 
 let game, gameBoard;
 
 function startGame() {
     game = new Game();
     game.start();
-    //let text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
-    gameBoard = new Board(PIECES_PER_SIDE);
-    console.log('board piecesArray');
-    console.log(gameBoard.piecesArray);
-    console.log('clicked');
-    console.log(gameBoard.piecesArray[1].clicked());
+    gameBoard = new Board(PIECES_PER_SIDE); 
     
-    
+
 }
 
 //window.onload = function () {

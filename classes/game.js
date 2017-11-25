@@ -54,11 +54,29 @@ class Game {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     updateGame() {
+        this.clear();
         gameBoard.piecesArray.forEach((piece, i) => {
             if (piece.clicked() == true) {
+                console.log('clicked: ');
+                console.log('next to empty clicked');
+                console.log('emptySquare: ');
+                console.log(gameBoard.emptySquare);
                 console.log(i + 1);
+                if (piece.isNextToEmpty(gameBoard.emptySquare)) {
+                    //switch spaces
+ 
+                    const empty = Object.assign({}, gameBoard.emptySquare);
+                    gameBoard.emptySquare.x = piece.x;
+                    gameBoard.emptySquare.y = piece.y;
+                    gameBoard.piecesArray[i].x = empty.x;
+                    gameBoard.piecesArray[i].y = empty.y;
+                }
             }
         });
+        this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
+        
+        gameBoard.draw();
+        
     }
 
 }

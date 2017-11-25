@@ -21,7 +21,7 @@ class Piece {
             this.click = false;
         }
         if (this.click) {
-            console.log('clicked!');
+            //console.log('clicked!');
             game.x = false;
             game.y = false;
     }
