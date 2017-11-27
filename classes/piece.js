@@ -46,6 +46,10 @@ class Piece {
                                 [bottomX, bottomY]];
         let isEmpty = false;
         adjacentPieces.forEach((piece, i) => {
+            console.log('isNextToEmpty function: adjacentPieces:');
+            console.log(piece);
+            
+            
             if (piece[0] == emptyPiece.x && //gameBoard.emptySquare.x &&
                 piece[1] == emptyPiece.y) { //gameBoard.emptySquare.y) {
                     isEmpty = true;

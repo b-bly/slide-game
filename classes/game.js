@@ -27,12 +27,12 @@ class Game {
     }
 
     start() {
-        this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
+        //this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
         window.addEventListener('mouseup', (e) => {
             this.x = e.pageX;
             this.y = e.pageY;
-            // console.log('eventListener');
-            // console.log(this.x, this.y);
+             console.log('eventListener');
+            console.log(this.x, this.y);
         });
         //https://stackoverflow.com/questions/43814422/how-to-pause-simple-canvas-game-made-with-js-and-html5
         window.addEventListener('keypress', (e) => {
@@ -57,14 +57,16 @@ class Game {
         this.clear();
         gameBoard.piecesArray.forEach((piece, i) => {
             if (piece.clicked() == true) {
-                console.log('clicked: ');
-                console.log('next to empty clicked');
                 console.log('emptySquare: ');
                 console.log(gameBoard.emptySquare);
-                console.log(i + 1);
+                console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
+                console.log('empty x: ', gameBoard.emptySquare.x, 'y: ', gameBoard.emptySquare.y);
+                
+                
                 if (piece.isNextToEmpty(gameBoard.emptySquare)) {
                     //switch spaces
- 
+                    console.log('isnexttoempty == true');
+                    
                     const empty = Object.assign({}, gameBoard.emptySquare);
                     gameBoard.emptySquare.x = piece.x;
                     gameBoard.emptySquare.y = piece.y;
@@ -73,7 +75,7 @@ class Game {
                 }
             }
         });
-        this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
+        //this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
         
         gameBoard.draw();
         
