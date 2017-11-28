@@ -21,41 +21,57 @@ class Game {
         if (!this.paused) {
             this.paused = true;
             console.log('paused');
-            
+
         } else if (this.paused) {
             this.paused = false;
             console.log('unpaused');
-            
+
         }
     }
 
     start() {
-        //this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
+        this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
         window.addEventListener('mouseup', (e) => {
             this.x = e.pageX;
             this.y = e.pageY;
-             console.log('eventListener');
+            console.log('eventListener');
             console.log(this.x, this.y);
         });
         //https://stackoverflow.com/questions/43814422/how-to-pause-simple-canvas-game-made-with-js-and-html5
 
-        window.addEventListener('keydown',  (e) => {
+        window.addEventListener('keydown', (e) => {
             this.key = e.keyCode;
             console.log('key pressed: ', this.key);
             if (this.key == 80) { // p key 
                 console.log('p key pressed');
-                
+
                 this.togglePause();
             }
         })
         this.interval = setInterval(() => {
             if (this.paused == false) this.updateGame();
-        }, 300);
-        
+        }, UPDATE_RATE);
+
     }
     clear() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+
+    checkIfWon() {
+        const result = gameBoard.piecesArray.reduce(function (acc, piece, i) {
+            if (piece.empty == false) {
+                if (i + 1 == piece.number) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 1;
+            }
+        }, 0);
+        return result;
+    }
+
     updateGame() {
         this.clear();
         //key events
@@ -65,31 +81,37 @@ class Game {
             gameBoard.create();
             this.key = false;
         }
-      
+
         //click on tile event: move tiles
         gameBoard.piecesArray.forEach((piece, i) => {
             if (piece.clicked() == true) {
                 console.log('emptySquare: ');
                 console.log(gameBoard.emptySquare);
                 console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
-                console.log('empty x: ', gameBoard.emptySquare.x, 'y: ', gameBoard.emptySquare.y); 
-                
-                if (piece.isNextToEmpty(gameBoard.emptySquare)) {
+                console.log('empty x: ', gameBoard.emptySquare.x, 'y: ', gameBoard.emptySquare.y);
+                const direction = piece.isNextToEmpty(gameBoard.emptySquare);
+                if (direction != false) {
                     //switch spaces
-                    console.log('isnexttoempty == true');
-                    
-                    const empty = Object.assign({}, gameBoard.emptySquare);
-                    gameBoard.emptySquare.x = piece.x;
-                    gameBoard.emptySquare.y = piece.y;
-                    gameBoard.piecesArray[i].x = empty.x;
-                    gameBoard.piecesArray[i].y = empty.y;
+                    console.log('isnexttoempty is not false');
+                    //pause and animate piece
+                    //need to know if it's left right top or bottom
+                    piece.animate(direction);
+                    // const empty = Object.assign({}, gameBoard.emptySquare);
+                    // gameBoard.emptySquare.x = piece.x;
+                    // gameBoard.emptySquare.y = piece.y;
+                    // gameBoard.piecesArray[i].x = empty.x;
+                    // gameBoard.piecesArray[i].y = empty.y;
                 }
             }
+
         });
-        //this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
-        
-        gameBoard.draw();
-        
+        this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
+        if (this.checkIfWon() == 1) {
+            //won message
+            this.message = new Text('Winner!', 200, 40, '10px Ariel', 'black');
+        } else {
+            gameBoard.draw();
+        }
     }
 
 }

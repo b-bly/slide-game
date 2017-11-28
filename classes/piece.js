@@ -10,7 +10,7 @@ class Piece {
         this.click = true;
     }
 
-    clicked() {        
+    clicked() {
         const myleft = this.x;
         const myright = this.x + (this.width);
         const mytop = this.y;
@@ -24,7 +24,7 @@ class Piece {
             //console.log('clicked!');
             game.x = false;
             game.y = false;
-    }
+        }
         return this.click;
     }
 
@@ -41,24 +41,81 @@ class Piece {
         const bottomX = this.x;
         const bottomY = this.y + (PIECE_WIDTH + PIECE_MARGIN);
         const adjacentPieces = [[leftX, leftY],
-                                [topX, topY],
-                                [rightX, rightY],
-                                [bottomX, bottomY]];
+        [topX, topY],
+        [rightX, rightY],
+        [bottomX, bottomY]];
         let isEmpty = false;
         adjacentPieces.forEach((piece, i) => {
-            console.log('isNextToEmpty function: adjacentPieces:');
-            console.log(piece);
-            
-            
             if (piece[0] == emptyPiece.x && //gameBoard.emptySquare.x &&
                 piece[1] == emptyPiece.y) { //gameBoard.emptySquare.y) {
-                    isEmpty = true;
+                switch (i) {
+                    case 0:
+                        isEmpty = 'left';
+                        break;
+                    case 1:
+                        isEmpty = 'top';
+                        break;
+                    case 2:
+                        isEmpty = 'right';
+                        break;
+                    case 3:
+                        isEmpty = 'bottom';
+                        break;
+                    default:
+                        break;
                 }
-                
+            }
+
         });
         return isEmpty;
     }
 
+    animate(direction) {
+        game.paused = true
+        let dx = 0;
+        let dy = 0;
+        const pieceX = this.x;
+        const pieceY = this.y;
+        
+        switch (direction) {
+            case 'left':
+                dx = -1;
+                this.animateXorY('x', dx, dy, pieceX, pieceY);
+                break;
+            case 'top':
+                dy = -1;
+                this.animateXorY('y', dx, dy, pieceX, pieceY);
+                break;
+            case 'right':
+                dx = 1;
+                this.animateXorY('x', dx, dy, pieceX, pieceY);
+                break;
+            case 'bottom':
+                dy = 1;
+                this.animateXorY('y', dx, dy, pieceX, pieceY);
+                break;
+            default:
+                break;
+        }
+        
+    }
+    animateXorY(xy, dx, dy, pieceX, pieceY) {
+        gameBoard.emptySquare.x = pieceX;
+        gameBoard.emptySquare.y = pieceY;
+        console.log('piece.animate emptySquare: ')
+        console.log(gameBoard.emptySquare);
+        for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 
+            setTimeout(() => {
+                xy == 'x'? this.x += dx : this.y += dy;
+    
+                game.clear();
+                gameBoard.draw();
+                console.log('piece.animate for loop');
+    
+            }, 10 * i); //animation rate ms
+        }
+        game.paused = false;
+    }
     update() {
         //fill rectangle
         this.ctx = game.context;
@@ -73,3 +130,4 @@ class Piece {
         this.ctx.fillText(this.number.toString(), x, y);
     }
 }
+
