@@ -10,6 +10,7 @@ class Game {
         this.frameNo = 0;
         this.x = false;
         this.y = false;
+        this.key = false;
         this.paused = false;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -23,6 +24,8 @@ class Game {
             
         } else if (this.paused) {
             this.paused = false;
+            console.log('unpaused');
+            
         }
     }
 
@@ -35,16 +38,16 @@ class Game {
             console.log(this.x, this.y);
         });
         //https://stackoverflow.com/questions/43814422/how-to-pause-simple-canvas-game-made-with-js-and-html5
-        window.addEventListener('keypress', (e) => {
-            const key = e.keyCode;
-            console.log('key: ', key);
-            
-            if (key === 112)// p key
-            {
+
+        window.addEventListener('keydown',  (e) => {
+            this.key = e.keyCode;
+            console.log('key pressed: ', this.key);
+            if (this.key == 80) { // p key 
+                console.log('p key pressed');
+                
                 this.togglePause();
             }
-
-        });
+        })
         this.interval = setInterval(() => {
             if (this.paused == false) this.updateGame();
         }, 300);
@@ -55,13 +58,21 @@ class Game {
     }
     updateGame() {
         this.clear();
+        //key events
+        if (this.key == 78) { //n key
+            //new game
+            console.log('n key pressed')
+            gameBoard.create();
+            this.key = false;
+        }
+      
+        //click on tile event: move tiles
         gameBoard.piecesArray.forEach((piece, i) => {
             if (piece.clicked() == true) {
                 console.log('emptySquare: ');
                 console.log(gameBoard.emptySquare);
                 console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
-                console.log('empty x: ', gameBoard.emptySquare.x, 'y: ', gameBoard.emptySquare.y);
-                
+                console.log('empty x: ', gameBoard.emptySquare.x, 'y: ', gameBoard.emptySquare.y); 
                 
                 if (piece.isNextToEmpty(gameBoard.emptySquare)) {
                     //switch spaces
