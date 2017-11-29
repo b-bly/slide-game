@@ -1,9 +1,8 @@
 class Board {
-    constructor(piecesPerSide) {
-        this.piecesPerSide = piecesPerSide;
-        this.totalPieces = Math.pow(this.piecesPerSide, 2);
+    constructor() {
+        this.totalPieces = Math.pow(PIECES_PER_SIDE, 2);
         this.piecesArray = [];
-        this.emptyIndex = Math.floor(Math.random() * this.totalPieces);
+        this.emptyNumber = Math.floor(Math.random() * this.totalPieces);
         this.emptySquare = {};
         this.create();
         this.draw()
@@ -21,25 +20,23 @@ class Board {
             randomArray.push(rand);
         }
         console.log('randomArray: ', randomArray);
-        
         //0 for empty square
-        
 
-        for (let j = 0; j < this.piecesPerSide; j++) {
-            for (let i = 0; i < this.piecesPerSide; i++) {
+        for (let j = 0; j < PIECES_PER_SIDE; j++) {
+            for (let i = 0; i < PIECES_PER_SIDE; i++) {
                 //    constructor(width, height, color, x, y, number) {
                 const x = (i * (PIECE_WIDTH + PIECE_MARGIN));
                 const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
-                const empty = (j * this.piecesPerSide + i) == this.emptyIndex;
+                const empty = (j * PIECES_PER_SIDE + i) == this.emptyNumber;
+                const index = i + j * PIECES_PER_SIDE;
                 if (empty) {
                     this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
-                        x, y, this.emptyIndex, empty);
+                        x, y, this.emptyNumber, index, empty);
                 } else {
                     const number = randomArray.pop();
                     const piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
-                        x, y, number, empty);
+                        x, y, number, index, empty);
                     this.piecesArray.push(piece);
-                    
                 }
             }
         }

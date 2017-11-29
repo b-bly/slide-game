@@ -1,12 +1,15 @@
 class Piece {
-    constructor(width, height, color, x, y, number, empty) {
+    constructor(width, height, color, x, y, number, index, empty) {
         this.width = width;
         this.height = height;
         this.color = color;
         this.x = x;
         this.y = y;
         this.number = number;
+        this.index = index;
         this.empty = empty;
+
+        //other variables
         this.click = true;
     }
 
@@ -76,32 +79,35 @@ class Piece {
         let dy = 0;
         const pieceX = this.x;
         const pieceY = this.y;
+        const pieceIndex = this.index;
         
         switch (direction) {
             case 'left':
                 dx = -1;
-                this.animateXorY('x', dx, dy, pieceX, pieceY);
+                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex);
                 break;
             case 'top':
                 dy = -1;
-                this.animateXorY('y', dx, dy, pieceX, pieceY);
+                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex);
                 break;
             case 'right':
                 dx = 1;
-                this.animateXorY('x', dx, dy, pieceX, pieceY);
+                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex);
                 break;
             case 'bottom':
                 dy = 1;
-                this.animateXorY('y', dx, dy, pieceX, pieceY);
+                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex);
                 break;
             default:
                 break;
         }
         
     }
-    animateXorY(xy, dx, dy, pieceX, pieceY) {
+    animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex) {
+        this.index = gameBoard.emptySquare.index;        
         gameBoard.emptySquare.x = pieceX;
         gameBoard.emptySquare.y = pieceY;
+        gameBoard.emptySquare.index = pieceIndex;
         console.log('piece.animate emptySquare: ')
         console.log(gameBoard.emptySquare);
         for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 

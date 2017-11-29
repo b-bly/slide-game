@@ -44,7 +44,9 @@ class Game {
             console.log('key pressed: ', this.key);
             if (this.key == 80) { // p key 
                 console.log('p key pressed');
-
+                console.log('piecesArray: ');
+                console.log(gameBoard.piecesArray);
+                
                 this.togglePause();
             }
         })
@@ -58,18 +60,20 @@ class Game {
     }
 
     checkIfWon() {
-        const result = gameBoard.piecesArray.reduce(function (acc, piece, i) {
-            if (piece.empty == false) {
-                if (i + 1 == piece.number) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            } else {
-                return 1;
-            }
-        }, 0);
-        return result;
+       
+        //sort based on index
+        gameBoard.piecesArray.sort((a, b) => {
+            return a.index - b.index;
+        });
+
+        for (let i = 0; i < gameBoard.piecesArray.length; i++) {
+            const number = gameBoard.piecesArray[i].number;
+            if (i + 1 !== number) {
+                return 0; //at least one pair of pieces is out of order
+                // 0 = not won yet
+            } 
+        }
+        return 1; // = won
     }
 
     updateGame() {
@@ -108,7 +112,8 @@ class Game {
         this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
         if (this.checkIfWon() == 1) {
             //won message
-            this.message = new Text('Winner!', 200, 40, '10px Ariel', 'black');
+            this.clear();
+            this.message = new Text('Winner!', 200, 40, '20px Ariel', 'black');
         } else {
             gameBoard.draw();
         }
