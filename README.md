@@ -1,5 +1,8 @@
 # Slide Puzzle
 ![Image of puzzle](/slide-puzzle.png)
+
+[Link](https://b-bly.github.io/slide-puzzle/puzzle.html) to hosted puzzle.
+
 Who doesn't like a good puzzle?
 I made this mainly as an exercise for learning code.  My learning goals:
 - familiarize myself with the HTML 5 canvas.
