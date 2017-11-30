@@ -8,10 +8,12 @@ class Text {
 
         this.write();
     }
-    write () {
+    write() {
         this.ctx = game.context;
         this.ctx.font = this.font;
         this.ctx.fillStyle = this.color;
+        this.ctx.textAlign = 'center';
         this.ctx.fillText(this.text, this.x, this.y);
+        
     }
 }

@@ -9,6 +9,28 @@ class Board {
     }
 
     create() {
+        //Easy board for testing:
+        // const randomArray = [0, 1, 2, 3];
+        // for (let j = 0; j < 2; j++) {
+        //     for (let i = 0; i < 2; i++) {
+        //         //    constructor(width, height, color, x, y, number) {
+        //         const x = (i * (PIECE_WIDTH + PIECE_MARGIN));
+        //         const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
+        //         const empty = (j * 2 + i) == 0;
+        //         const index = i + j * 2;
+        //         if (empty) {
+        //             this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
+        //                 x, y, this.emptyNumber, index, empty);
+        //                 randomArray.shift();
+        //         } else {
+        //             const number = randomArray.shift();
+        //             const piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
+        //                 x, y, number, index, empty);
+        //             this.piecesArray.push(piece);
+        //         }
+        //     }
+        // }
+
         //create random numbers array.
         const randomArray = [];
 

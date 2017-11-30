@@ -74,7 +74,7 @@ class Piece {
     }
 
     animate(direction) {
-        game.paused = true
+        
         let dx = 0;
         let dy = 0;
         const pieceX = this.x;
@@ -104,10 +104,7 @@ class Piece {
         
     }
     animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex) {
-        this.index = game.gameBoard.emptySquare.index;        
-        game.gameBoard.emptySquare.x = pieceX;
-        game.gameBoard.emptySquare.y = pieceY;
-        game.gameBoard.emptySquare.index = pieceIndex;
+        
         console.log('piece.animate emptySquare: ')
         console.log(game.gameBoard.emptySquare);
         for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 
@@ -117,16 +114,27 @@ class Piece {
                 game.clear();
                 game.gameBoard.draw();
                 console.log('piece.animate for loop');
-    
+                //lasttime through
+                //need to update these variables here so that winner! message doesn't get
+                //displayed until animation is done.
+                if (i == PIECE_WIDTH + PIECE_MARGIN - 1) {
+                    game.paused = false;
+                    this.index = game.gameBoard.emptySquare.index;        
+                    game.gameBoard.emptySquare.x = pieceX;
+                    game.gameBoard.emptySquare.y = pieceY;
+                    game.gameBoard.emptySquare.index = pieceIndex;
+                }
             }, 10 * i); //animation rate ms
         }
-        game.paused = false;
+        
     }
     update() {
         //fill rectangle
         this.ctx = game.context;
         this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.strokeStyle = 'lightgray';
+        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        roundRect(this.ctx, this.x, this.y, this.width, this.height, 5, true);
         //write font
         this.ctx.font = '20px Ariel';
         this.ctx.fillStyle = 'white';
@@ -137,3 +145,38 @@ class Piece {
     }
 }
 
+//copied from https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+    if (typeof stroke == 'undefined') {
+      stroke = true;
+    }
+    if (typeof radius === 'undefined') {
+      radius = 5;
+    }
+    if (typeof radius === 'number') {
+      radius = {tl: radius, tr: radius, br: radius, bl: radius};
+    } else {
+      var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+      for (var side in defaultRadius) {
+        radius[side] = radius[side] || defaultRadius[side];
+      }
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius.tl, y);
+    ctx.lineTo(x + width - radius.tr, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+    ctx.lineTo(x + width, y + height - radius.br);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+    ctx.lineTo(x + radius.bl, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+    ctx.lineTo(x, y + radius.tl);
+    ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+    ctx.closePath();
+    if (fill) {
+      ctx.fill();
+    }
+    if (stroke) {
+      ctx.stroke();
+    }
+  
+  }

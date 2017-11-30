@@ -11,22 +11,19 @@ let game, gameBoard;
 
 function startGame() {
     game = new Game();
-    game.start();
+    
     
 }
 
-document.getElementById("submit").addEventListener("click", submit);
 
-function submit() {
-     PIECES_PER_SIDE = document.getElementById('boardSize').value;
-    console.log('pieces per side: ');
-    console.log(PIECES_PER_SIDE);
-    let rect = game.canvasDiv.getBoundingClientRect();
-    console.log('canvasDiv');
-    console.log(rect);
+// function submit() {
+//      PIECES_PER_SIDE = document.getElementById('boardSize').value;
+//     console.log('pieces per side: ');
+//     console.log(PIECES_PER_SIDE);
     
-}
+// }
 
-//window.onload = function () {
-
-//}
+//center game
+//start screen: choose board size
+//remove start screen
+//add canvas on click

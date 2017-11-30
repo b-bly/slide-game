@@ -1,6 +1,7 @@
 class Game {
     constructor() {
         this.canvas = document.createElement("canvas");
+        this.canvas.id = 'canvas';
         this.initialize();
 
     }
@@ -14,9 +15,9 @@ class Game {
         this.paused = false;
         this.context = this.canvas.getContext("2d");
 
-        this.canvasDiv = document.getElementById('canvas');
+        this.canvasDiv = document.getElementById('canvasDiv');
         this.canvasDiv.appendChild(this.canvas);
-        
+        this.settings = new Settings();
         //document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     }
 
@@ -35,7 +36,7 @@ class Game {
     start() {
         //this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
         window.addEventListener('mouseup', (e) => {
-            let coords = this.canvasDiv.getBoundingClientRect();
+            let coords = this.canvas.getBoundingClientRect();
             this.x = e.pageX - coords.x;
             this.y = e.pageY - coords.y;
             console.log('eventListener');
@@ -59,6 +60,7 @@ class Game {
         }, UPDATE_RATE);
         this.gameBoard = new Board(PIECES_PER_SIDE); 
     }
+
     clear() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -81,6 +83,8 @@ class Game {
     }
 
     updateGame() {
+     
+        
         this.clear();
         //key events
         if (this.key == 78) { //n key
@@ -101,6 +105,7 @@ class Game {
                 if (direction != false) {
                     //animate move
                     console.log('isnexttoempty is not false');
+                    this.paused = true;
                     piece.animate(direction);
                    
                 }
@@ -111,7 +116,18 @@ class Game {
         if (this.checkIfWon() == 1) {
             //won message
             this.clear();
-            this.message = new Text('Winner!', 200, 40, '20px Ariel', 'black');
+            const centerx = this.canvas.width/2;
+            const centery = this.canvas.width/2;
+            this.message = new Text('Winner!', centerx, centery, '20px Ariel', 'black');
+            clearInterval(this.interval);
+            setTimeout(() => {
+                console.log('update: checkifwon: timeout running');
+                
+                this.clear();
+                
+                this.settings.mount();
+            }, 2000);
+
         } else {
             this.gameBoard.draw();
         }
