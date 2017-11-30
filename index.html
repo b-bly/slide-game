@@ -9,15 +9,24 @@
         <title>Slide Puzzle</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body onload="startGame()">
-        
+       <div class="title"><h2>Slide Puzzle</h2></div>
+        <div id="canvas"></div>
+        <div class="header">
+                
+                    Board size: <input type="text" name="boardSize" id="boardSize"><br>
+                  
+                    <button id="submit">Submit</button>
+                  
+        </div>
         <script src="data.js"></script>
         <!-- classes -->
-        <script src="classes/game.js" type="text/javascript"></script>
         <script src="classes/piece.js" type="text/javascript"></script>
         <script src="classes/board.js" type="text/javascript"></script>
         <script src="classes/text.js" type="text/javascript"></script>
+        <script src="classes/game.js" type="text/javascript"></script>
         
         <script src="script.js" type="text/javascript"></script>
         

@@ -49,8 +49,8 @@ class Piece {
         [bottomX, bottomY]];
         let isEmpty = false;
         adjacentPieces.forEach((piece, i) => {
-            if (piece[0] == emptyPiece.x && //gameBoard.emptySquare.x &&
-                piece[1] == emptyPiece.y) { //gameBoard.emptySquare.y) {
+            if (piece[0] == emptyPiece.x && //game.gameBoard.emptySquare.x &&
+                piece[1] == emptyPiece.y) { //game.gameBoard.emptySquare.y) {
                 switch (i) {
                     case 0:
                         isEmpty = 'left';
@@ -104,18 +104,18 @@ class Piece {
         
     }
     animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex) {
-        this.index = gameBoard.emptySquare.index;        
-        gameBoard.emptySquare.x = pieceX;
-        gameBoard.emptySquare.y = pieceY;
-        gameBoard.emptySquare.index = pieceIndex;
+        this.index = game.gameBoard.emptySquare.index;        
+        game.gameBoard.emptySquare.x = pieceX;
+        game.gameBoard.emptySquare.y = pieceY;
+        game.gameBoard.emptySquare.index = pieceIndex;
         console.log('piece.animate emptySquare: ')
-        console.log(gameBoard.emptySquare);
+        console.log(game.gameBoard.emptySquare);
         for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 
             setTimeout(() => {
                 xy == 'x'? this.x += dx : this.y += dy;
     
                 game.clear();
-                gameBoard.draw();
+                game.gameBoard.draw();
                 console.log('piece.animate for loop');
     
             }, 10 * i); //animation rate ms
