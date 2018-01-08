@@ -40,10 +40,9 @@ open index.html
 
 Features that you would like to add at some point in the future.
 
-- [ ] Ability to see and follow the favorites collections of other users.
-- [ ] A card rating system based on the number of times a card is added to favorites.
-- [ ] Search based on card rating.
-- [ ] Flag a card as inappropriate.
+- [ ] Annimated reset of board
+- [ ] Animated scrambling of board on start.
+- [ ] AI solver.
 
 ## Author
 
