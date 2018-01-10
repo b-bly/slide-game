@@ -2,11 +2,10 @@ class Settings {
     constructor() {
         this.example = 'example';
         this.mount();
-
-
     }
 
     mount() {
+        //Board size stuff
         const html = '<div class="container">' +
         
             '<div class=""><label>Board width:</label>' +
@@ -22,6 +21,8 @@ class Settings {
         this.content = document.body.insertBefore(newNode, referenceNode);
         document.getElementById("submit").addEventListener("click", this.submit);
        
+        //testing button
+        document.getElementById("testing").addEventListener("click", this.test);
     }
     removeEl() {
         console.log('unmount called');
@@ -38,6 +39,10 @@ class Settings {
         game.canvas.width = PIECES_PER_SIDE * PIECE_WIDTH + (PIECES_PER_SIDE - 1) * PIECE_MARGIN;
         game.start();
 
+    }
+    test() {
+        console.log(game.gameBoard.shuffleBoard);
+        game.gameBoard.shuffleBoard();
     }
 }
 function removeEl() {

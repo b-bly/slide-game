@@ -65,12 +65,10 @@ class Game {
     }
 
     checkIfWon() {
-
         //sort based on index
         this.gameBoard.piecesArray.sort((a, b) => {
             return a.index - b.index;
         });
-
         for (let i = 0; i < this.gameBoard.piecesArray.length; i++) {
             const number = this.gameBoard.piecesArray[i].number;
             const piece = this.gameBoard.piecesArray[i];

@@ -45,7 +45,6 @@ class Board {
         }
         console.log('randomArray: ', randomArray);
         //0 for empty square
-
         for (let j = 0; j < PIECES_PER_SIDE; j++) {
             const row = [];
             for (let i = 0; i < PIECES_PER_SIDE; i++) {
@@ -60,15 +59,15 @@ class Board {
                     this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
                         x, y, boardX, boardY, this.emptyNumber, index, empty);
                     this.piecesArray.push(this.emptySquare);
+                    //don't include empty unless you want to update the position in piece.animate
                     row.push(this.emptySquare);
                 } else {
                     const number = randomArray.pop();
                     const piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
                         x, y, boardX, boardY, number, index, empty);
-                        this.piecesArray.push(piece);
-                        row.push(piece);
+                    this.piecesArray.push(piece);
+                    row.push(piece);
                 }
-                
             }
             this.twoDPiecesArray.push(row);
         }
@@ -83,8 +82,48 @@ class Board {
     }
 
     shuffleBoard() {
+        this.piecesArray.sort((a, b) => {
+            return a.index - b.index;
+        });
+        const twoDPiecesArray = [];
+        for (let j = 0; j < PIECES_PER_SIDE; j++) {
+            const row = [];
+            for (let i = 0; i < PIECES_PER_SIDE; i++) {
+                row.push(this.piecesArray[i + j]);
+            }
+            twoDPiecesArray.push(row);
+        }
+        const emptyIndex = this.emptySquare.index;
+        const emptyX = emptyIndex % PIECES_PER_SIDE;
+        const emptyY = Math.floor(emptyIndex / PIECES_PER_SIDE);
         //randome move -- select piece above, below or side of empty.
+        const possibleMoves = [];
+        //check possible moves
+        if (emptyY > 0) possibleMoves.push('up');
+        if (emptyY < PIECES_PER_SIDE - 1) possibleMoves.push('bottom');
+        if (emptyX > 0) possibleMoves.push('left');
+        if (emptyX < PIECES_PER_SIDE - 1) possibleMoves.push('right');
+        //assign random move
+        const random = Math.floor(Math.random() * possibleMoves.length);
+        const direction = possibleMoves[random];
+        let piece;
+        switch (direction) {
+            case 'down': //perspective of piece that will move not empty
+                piece = this.piecesArray[emptyIndex - PIECES_PER_SIDE];
+                break;
+            case 'up':
+                piece = this.piecesArray[emptyIndex + PIECES_PER_SIDE]; //need to adjust down and
+                //right if you take empty out of pieces array by - 1
+                break;
+            case 'left':
+                piece = this.piecesArray[emptyIndex + 1];
+                break;
+            case 'right':
+                piece = this.piecesArray[emptyIndex - 1];
+                break;
+        }
         //animate the piece.
+        piece.animate(direction);
         //update TwoDBoardArray -- easier to generate a 2D array from this.piecesArray than
         //to update it every move?
     }

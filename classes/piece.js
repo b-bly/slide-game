@@ -76,7 +76,8 @@ class Piece {
     }
 
     animate(direction) {
-        
+        console.log('piece.animate, direction: ');
+        console.log(direction);
         let dx = 0;
         let dy = 0;
         const pieceX = this.x;

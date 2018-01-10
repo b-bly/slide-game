@@ -6,5 +6,3 @@ let game;
 function startGame() {
     game = new Game();
 }
-
-
