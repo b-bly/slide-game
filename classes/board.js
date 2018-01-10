@@ -71,5 +71,25 @@ class Board {
             }
         });
     }
+
+    solve() {
+        //GAME AI
+        //VARIABLES:
+        //this.emptySquare x, y, xRel, yRel: need to keep track of empty location
+        //piece.xRel, yRel: may need to store relative x, y coords not pixel
+        //boardAray: store boardArray as 2d version of piecesArray
+        //this.nextNumber
+
+        //STEPS
+        //loop throught boardArr to find nextNumber (start with 1)
+
+        //AI STRATEGY
+        //solve
+            //first row
+            //first column
+            //second row...
+            //when 4 squares remain, just rotate empty
+
+    }
 }
 

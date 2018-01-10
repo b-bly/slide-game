@@ -50,8 +50,7 @@ class Game {
             if (this.key == 80) { // p key 
                 console.log('p key pressed');
                 console.log('piecesArray: ');
-                console.log(this.gameBoard.piecesArray);
-                
+                console.log(this.gameBoard.piecesArray);               
                 this.togglePause();
             }
         })
