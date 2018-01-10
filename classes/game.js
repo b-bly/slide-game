@@ -50,14 +50,14 @@ class Game {
             if (this.key == 80) { // p key 
                 console.log('p key pressed');
                 console.log('piecesArray: ');
-                console.log(this.gameBoard.piecesArray);               
+                console.log(this.gameBoard.piecesArray);
                 this.togglePause();
             }
         })
         this.interval = setInterval(() => {
             if (this.paused == false) this.updateGame();
         }, UPDATE_RATE);
-        this.gameBoard = new Board(PIECES_PER_SIDE); 
+        this.gameBoard = new Board(PIECES_PER_SIDE);
     }
 
     clear() {
@@ -65,7 +65,7 @@ class Game {
     }
 
     checkIfWon() {
-       
+
         //sort based on index
         this.gameBoard.piecesArray.sort((a, b) => {
             return a.index - b.index;
@@ -73,17 +73,19 @@ class Game {
 
         for (let i = 0; i < this.gameBoard.piecesArray.length; i++) {
             const number = this.gameBoard.piecesArray[i].number;
-            if (i + 1 !== number) {
-                return 0; //at least one pair of pieces is out of order
-                // 0 = not won yet
-            } 
+            const piece = this.gameBoard.piecesArray[i];
+            //don't need to check empty square
+            if (piece.empty == false) {
+                if (i + 1 !== number) {
+                    return 0; //at least one pair of pieces is out of order
+                    // 0 = not won yet
+                }
+            }
         }
         return 1; // = won
     }
 
     updateGame() {
-     
-        
         this.clear();
         //key events
         if (this.key == 78) { //n key
@@ -95,7 +97,8 @@ class Game {
 
         //click on tile event: move tiles
         this.gameBoard.piecesArray.forEach((piece, i) => {
-            if (piece.clicked() == true) {
+            if (piece.clicked() == true &&
+                piece.empty == false) {
                 console.log('emptySquare: ');
                 console.log(this.gameBoard.emptySquare);
                 console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
@@ -106,7 +109,7 @@ class Game {
                     console.log('isnexttoempty is not false');
                     this.paused = true;
                     piece.animate(direction);
-                   
+
                 }
             }
 
@@ -115,15 +118,15 @@ class Game {
         if (this.checkIfWon() == 1) {
             //won message
             this.clear();
-            const centerx = this.canvas.width/2;
-            const centery = this.canvas.width/2;
+            const centerx = this.canvas.width / 2;
+            const centery = this.canvas.width / 2;
             this.message = new Text('Winner!', centerx, centery, '20px Ariel', 'black');
             clearInterval(this.interval);
             setTimeout(() => {
                 console.log('update: checkifwon: timeout running');
-                
+
                 this.clear();
-                
+
                 this.settings.mount();
             }, 2000);
 

@@ -1,10 +1,12 @@
 class Piece {
-    constructor(width, height, color, x, y, number, index, empty) {
+    constructor(width, height, color, x, y, boardX, boardY, number, index, empty) {
         this.width = width;
         this.height = height;
         this.color = color;
         this.x = x;
         this.y = y;
+        this.boardX = boardX;
+        this.boardY = boardY;
         this.number = number;
         this.index = index;
         this.empty = empty;
@@ -105,16 +107,16 @@ class Piece {
     }
     animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex) {
         
-        console.log('piece.animate emptySquare: ')
-        console.log(game.gameBoard.emptySquare);
+        //console.log('piece.animate emptySquare: ')
+        //console.log(game.gameBoard.emptySquare);
         for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 
             setTimeout(() => {
                 xy == 'x'? this.x += dx : this.y += dy;
     
                 game.clear();
                 game.gameBoard.draw();
-                console.log('piece.animate for loop');
-                //lasttime through
+                //console.log('piece.animate for loop');
+                //last time through - update variables
                 //need to update these variables here so that winner! message doesn't get
                 //displayed until animation is done.
                 if (i == PIECE_WIDTH + PIECE_MARGIN - 1) {
@@ -133,14 +135,13 @@ class Piece {
         this.ctx = game.context;
         this.ctx.fillStyle = this.color;
         this.ctx.strokeStyle = 'lightgray';
-        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
         roundRect(this.ctx, this.x, this.y, this.width, this.height, 5, true);
-        //write font
+        //write number
         this.ctx.font = '20px Ariel';
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
         const x = this.x + PIECE_WIDTH / 2;
-        const y = this.y + PIECE_WIDTH / 1.5;
+        const y = this.y + PIECE_WIDTH / 1.5;//doesn't center the number if it's 2 for some reason.
         this.ctx.fillText(this.number.toString(), x, y);
     }
 }
