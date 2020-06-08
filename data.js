@@ -1,4 +1,4 @@
-let PIECES_PER_SIDE = 5; //initialized to 2, but set in settings.js
+let PIECES_PER_SIDE = 3; //initialized to 2, but set in settings.js
 const PIECE_WIDTH = 50;
 const PIECE_COLOR = 'skyblue';
 const BOARD_MARGIN_Y = 10;

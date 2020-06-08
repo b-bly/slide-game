@@ -125,7 +125,12 @@ class Game {
             clearInterval(this.interval);
             setTimeout(() => {
                 this.clear();
-                this.settings.mount();
+
+                if (USER_DECIDES_SETTINGS === true) {
+                    this.settings.mount();
+                } else {
+                    this.start();
+                }
             }, 2000);
 
         } else {
