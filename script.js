@@ -5,4 +5,15 @@
 let game;
 function startGame() {
     game = new Game();
+
+}
+
+
+if (
+    document.readyState === "complete" ||
+    (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+    startGame();
+} else {
+    document.addEventListener("DOMContentLoaded", startGame);
 }

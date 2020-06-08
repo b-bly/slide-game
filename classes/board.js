@@ -6,11 +6,12 @@ class Board {
         this.emptySquare = {};
         this.twoDPiecesArray = [];
         this.create();
-        this.draw()
+        this.drawIfGameIsReady();
     }
 
     create() {
         //Easy board for testing:
+
         // const randomArray = [0, 1, 2, 3];
         // for (let j = 0; j < 2; j++) {
         //     for (let i = 0; i < 2; i++) {
@@ -43,7 +44,6 @@ class Board {
             }
             randomArray.push(rand);
         }
-        console.log('randomArray: ', randomArray);
         //0 for empty square
         for (let j = 0; j < PIECES_PER_SIDE; j++) {
             const row = [];
@@ -81,6 +81,16 @@ class Board {
         });
     }
 
+    drawIfGameIsReady() {
+        if (game) {
+            this.draw();
+        } else {
+            setTimeout(() => {
+                this.drawIfGameIsReady();
+            }, 500);
+        }
+    }
+
     shuffleBoard() {
         this.piecesArray.sort((a, b) => {
             return a.index - b.index;
@@ -96,14 +106,20 @@ class Board {
         const emptyIndex = this.emptySquare.index;
         const emptyX = emptyIndex % PIECES_PER_SIDE;
         const emptyY = Math.floor(emptyIndex / PIECES_PER_SIDE);
+
         //randome move -- select piece above, below or side of empty.
+
         const possibleMoves = [];
+
         //check possible moves
+
         if (emptyY > 0) possibleMoves.push('up');
         if (emptyY < PIECES_PER_SIDE - 1) possibleMoves.push('bottom');
         if (emptyX > 0) possibleMoves.push('left');
         if (emptyX < PIECES_PER_SIDE - 1) possibleMoves.push('right');
+
         //assign random move
+
         const random = Math.floor(Math.random() * possibleMoves.length);
         const direction = possibleMoves[random];
         let piece;
@@ -114,6 +130,7 @@ class Board {
             case 'up':
                 piece = this.piecesArray[emptyIndex + PIECES_PER_SIDE]; //need to adjust down and
                 //right if you take empty out of pieces array by - 1
+
                 break;
             case 'left':
                 piece = this.piecesArray[emptyIndex + 1];
@@ -122,10 +139,7 @@ class Board {
                 piece = this.piecesArray[emptyIndex - 1];
                 break;
         }
-        //animate the piece.
         piece.animate(direction);
-        //update TwoDBoardArray -- easier to generate a 2D array from this.piecesArray than
-        //to update it every move?
     }
 
     solve() {
@@ -145,6 +159,8 @@ class Board {
         //first column
         //second row...
         //when 4 squares remain, just rotate empty
+
+        // https://www.kopf.com.br/kaplof/how-to-solve-any-slide-puzzle-regardless-of-its-size/
 
     }
 }

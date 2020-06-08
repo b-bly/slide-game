@@ -1,6 +1,5 @@
 class Settings {
     constructor() {
-        this.example = 'example';
         this.mount();
     }
 
@@ -20,36 +19,20 @@ class Settings {
         const referenceNode = document.getElementById('canvasDiv');
         this.content = document.body.insertBefore(newNode, referenceNode);
         document.getElementById("submit").addEventListener("click", this.submit);
-       
-        //testing button
-        document.getElementById("testing").addEventListener("click", this.test);
-    }
-    removeEl() {
-        console.log('unmount called');
+           }
 
-        // const parent = document.body;
-        // const child = document.getElementById('settings');
-        //parent.removeChild(child);
-    }
     submit() {
         PIECES_PER_SIDE = document.getElementById('boardSize').value;
-        console.log('pieces per side: ');
-        console.log(PIECES_PER_SIDE);
         removeEl();
         game.canvas.width = PIECES_PER_SIDE * PIECE_WIDTH + (PIECES_PER_SIDE - 1) * PIECE_MARGIN;
         game.start();
-
     }
     test() {
-        console.log(game.gameBoard.shuffleBoard);
         game.gameBoard.shuffleBoard();
     }
 }
 function removeEl() {
-    console.log('removeEl called');
     const parent = document.body;
-    const child = document.getElementById('settings');
-    console.log(child);
-    
+    const child = document.getElementById('settings');    
     parent.removeChild(child);
 }

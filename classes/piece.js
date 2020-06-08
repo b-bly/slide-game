@@ -70,14 +70,13 @@ class Piece {
                         break;
                 }
             }
-
         });
         return isEmpty;
     }
 
     animate(direction) {
-        console.log('piece.animate, direction: ');
-        console.log(direction);
+        // console.log('piece.animate, direction: ');
+        // console.log(direction);
         let dx = 0;
         let dy = 0;
         const pieceX = this.x;
@@ -116,10 +115,12 @@ class Piece {
     
                 game.clear();
                 game.gameBoard.draw();
+
                 //console.log('piece.animate for loop');
                 //last time through - update variables
                 //need to update these variables here so that winner! message doesn't get
                 //displayed until animation is done.
+
                 if (i == PIECE_WIDTH + PIECE_MARGIN - 1) {
                     game.paused = false;
                     this.index = game.gameBoard.emptySquare.index;        
@@ -133,11 +134,14 @@ class Piece {
     }
     update() {
         //fill rectangle
+
         this.ctx = game.context;
         this.ctx.fillStyle = this.color;
         this.ctx.strokeStyle = 'lightgray';
         roundRect(this.ctx, this.x, this.y, this.width, this.height, 5, true);
+
         //write number
+
         this.ctx.font = '20px Ariel';
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
@@ -180,5 +184,4 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     if (stroke) {
       ctx.stroke();
     }
-  
   }

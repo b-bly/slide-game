@@ -1,4 +1,5 @@
 class Game {
+    context;
     constructor() {
         this.canvas = document.createElement("canvas");
         this.canvas.id = 'canvas';
@@ -17,47 +18,46 @@ class Game {
 
         this.canvasDiv = document.getElementById('canvasDiv');
         this.canvasDiv.appendChild(this.canvas);
-        this.settings = new Settings();
-        //document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+        // if settings used to start game, then uncomment this
+        if (USER_DECIDES_SETTINGS) {
+            this.settings = new Settings();
+        } else {
+            // setTimeout(() => {
+                this.start();
+            // }, 1000);
+        }
     }
 
     togglePause() {
         if (!this.paused) {
             this.paused = true;
-            console.log('paused');
 
         } else if (this.paused) {
             this.paused = false;
-            console.log('unpaused');
-
         }
     }
 
     start() {
-        //this.text = new Text('Slide puzzle', 40, 40, '30px Ariel', 'black');
+        this.canvas.width = PIECES_PER_SIDE * PIECE_WIDTH + (PIECES_PER_SIDE - 1) * PIECE_MARGIN;
         window.addEventListener('mouseup', (e) => {
             let coords = this.canvas.getBoundingClientRect();
             this.x = e.pageX - coords.x;
             this.y = e.pageY - coords.y;
-            console.log('eventListener');
-            console.log(this.x, this.y);
         });
         //https://stackoverflow.com/questions/43814422/how-to-pause-simple-canvas-game-made-with-js-and-html5
 
         window.addEventListener('keydown', (e) => {
             this.key = e.keyCode;
-            console.log('key pressed: ', this.key);
             if (this.key == 80) { // p key 
-                console.log('p key pressed');
-                console.log('piecesArray: ');
-                console.log(this.gameBoard.piecesArray);
                 this.togglePause();
             }
         })
-        this.interval = setInterval(() => {
-            if (this.paused == false) this.updateGame();
-        }, UPDATE_RATE);
         this.gameBoard = new Board(PIECES_PER_SIDE);
+
+        this.interval = setInterval(() => {
+            if (this.paused === false) { this.updateGame(); }
+        }, UPDATE_RATE);
     }
 
     clear() {
@@ -88,7 +88,6 @@ class Game {
         //key events
         if (this.key == 78) { //n key
             //new game
-            console.log('n key pressed')
             this.gameBoard.create();
             this.key = false;
         }
@@ -97,14 +96,13 @@ class Game {
         this.gameBoard.piecesArray.forEach((piece, i) => {
             if (piece.clicked() == true &&
                 piece.empty == false) {
-                console.log('emptySquare: ');
-                console.log(this.gameBoard.emptySquare);
-                console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
-                console.log('empty x: ', this.gameBoard.emptySquare.x, 'y: ', this.gameBoard.emptySquare.y);
+                // console.log('emptySquare: ');
+                // console.log(this.gameBoard.emptySquare);
+                // console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
+                // console.log('empty x: ', this.gameBoard.emptySquare.x, 'y: ', this.gameBoard.emptySquare.y);
                 const direction = piece.isNextToEmpty(this.gameBoard.emptySquare);
                 if (direction != false) {
                     //animate move
-                    console.log('isnexttoempty is not false');
                     this.paused = true;
                     piece.animate(direction);
 
@@ -121,10 +119,7 @@ class Game {
             this.message = new Text('Winner!', centerx, centery, '20px Ariel', 'black');
             clearInterval(this.interval);
             setTimeout(() => {
-                console.log('update: checkifwon: timeout running');
-
                 this.clear();
-
                 this.settings.mount();
             }, 2000);
 
