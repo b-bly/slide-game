@@ -148,7 +148,7 @@ class Piece {
 
         //write number
 
-        this.ctx.font = '20px Ariel';
+        this.ctx.font = '25px Ariel';
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
         const x = this.x + PIECE_WIDTH / 2;
