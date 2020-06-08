@@ -1,40 +1,44 @@
 class Board {
+    moves = 0;
+    piecesArray = [];
+    emptySquare = {};
+    twoDPiecesArray = [];
+    totalPieces = Math.pow(PIECES_PER_SIDE, 2);
+    emptyNumber = 0;
+   
     constructor() {
-        this.totalPieces = Math.pow(PIECES_PER_SIDE, 2);
-        this.piecesArray = [];
-        this.emptyNumber = Math.floor(Math.random() * this.totalPieces);
-        this.emptySquare = {};
-        this.twoDPiecesArray = [];
         this.create();
-        this.drawIfGameIsReady();
+        this.drawIfGameIsReady();  
     }
 
-    create() {
+    createTestBoard() {
         //Easy board for testing:
 
-        // const randomArray = [0, 1, 2, 3];
-        // for (let j = 0; j < 2; j++) {
-        //     for (let i = 0; i < 2; i++) {
-        //         //    constructor(width, height, color, x, y, number) {
-        //         const x = (i * (PIECE_WIDTH + PIECE_MARGIN));
-        //         const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
-        //         const empty = (j * 2 + i) == 0;
-        //         const index = i + j * 2;
-        //         if (empty) {
-        //             this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
-        //                 x, y, this.emptyNumber, index, empty);
-        //                 randomArray.shift();
-        //         } else {
-        //             const number = randomArray.shift();
-        //             const piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
-        //                 x, y, number, index, empty);
-        //             this.piecesArray.push(piece);
-        //         }
-        //     }
-        // }
+        const randomArray = [0, 1, 2, 3];
+        for (let j = 0; j < 2; j++) {
+            for (let i = 0; i < 2; i++) {
+                //    constructor(width, height, color, x, y, number) {
+                const x = (i * (PIECE_WIDTH + PIECE_MARGIN));
+                const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
+                const empty = (j * 2 + i) == 0;
+                const index = i + j * 2;
+                if (empty) {
+                    this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
+                        x, y, this.emptyNumber, index, empty);
+                    randomArray.shift();
+                } else {
+                    const number = randomArray.shift();
+                    const piece = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
+                        x, y, number, index, empty);
+                    this.piecesArray.push(piece);
+                }
+            }
+        }
+    }
 
-        //create random numbers array.
+    getRandomBoardArray() {
         const randomArray = [];
+        this.emptyNumber = Math.floor(Math.random() * this.totalPieces);
 
         for (let i = 0; i < this.totalPieces - 1; i++) { //one less than total pieces because the 
             //empty is always assigned the highest number
@@ -44,11 +48,27 @@ class Board {
             }
             randomArray.push(rand);
         }
+        return randomArray;
+    }
+
+    getBoardArrayInOrder() {
+        const orderedArray = [];
+        for (let i = 0; i < this.totalPieces - 1; i++) { //one less than total pieces because the 
+            orderedArray.push(i);
+        }
+        return orderedArray.reverse();
+    }
+
+    create() {
+        //create random numbers array.
+
+        const randomArray = this.getRandomBoardArray();
+
         //0 for empty square
+
         for (let j = 0; j < PIECES_PER_SIDE; j++) {
             const row = [];
             for (let i = 0; i < PIECES_PER_SIDE; i++) {
-                //    constructor(width, height, color, x, y, number) {
                 const boardX = i;
                 const boardY = j;
                 const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
@@ -91,32 +111,30 @@ class Board {
         }
     }
 
-    shuffleBoard() {
-        this.piecesArray.sort((a, b) => {
-            return a.index - b.index;
-        });
-        const twoDPiecesArray = [];
-        for (let j = 0; j < PIECES_PER_SIDE; j++) {
-            const row = [];
-            for (let i = 0; i < PIECES_PER_SIDE; i++) {
-                row.push(this.piecesArray[i + j]);
-            }
-            twoDPiecesArray.push(row);
-        }
+    makeRandomMove() {
+        // this.piecesArray.sort((a, b) => {
+        //     return a.index - b.index;
+        // });
+        // const twoDPiecesArray = [];
+        // for (let j = 0; j < PIECES_PER_SIDE; j++) {
+        //     const row = [];
+        //     for (let i = 0; i < PIECES_PER_SIDE; i++) {
+        //         row.push(this.piecesArray[i + j]);
+        //     }
+        //     twoDPiecesArray.push(row);
+        // }
         const emptyIndex = this.emptySquare.index;
         const emptyX = emptyIndex % PIECES_PER_SIDE;
         const emptyY = Math.floor(emptyIndex / PIECES_PER_SIDE);
-
-        //randome move -- select piece above, below or side of empty.
-
         const possibleMoves = [];
 
-        //check possible moves
+        // add all possible moves
 
-        if (emptyY > 0) possibleMoves.push('up');
-        if (emptyY < PIECES_PER_SIDE - 1) possibleMoves.push('bottom');
-        if (emptyX > 0) possibleMoves.push('left');
-        if (emptyX < PIECES_PER_SIDE - 1) possibleMoves.push('right');
+        if (emptyY > 0) possibleMoves.push(DOWN);
+        if (emptyY < PIECES_PER_SIDE - 1) possibleMoves.push(UP);
+        if (emptyX > 0) possibleMoves.push(RIGHT);
+        if (emptyX < PIECES_PER_SIDE - 1) possibleMoves.push(LEFT);
+        // console.log(possibleMoves);
 
         //assign random move
 
@@ -124,22 +142,40 @@ class Board {
         const direction = possibleMoves[random];
         let piece;
         switch (direction) {
-            case 'down': //perspective of piece that will move not empty
+            case DOWN: //perspective of piece that will move not empty
                 piece = this.piecesArray[emptyIndex - PIECES_PER_SIDE];
                 break;
-            case 'up':
+            case UP:
                 piece = this.piecesArray[emptyIndex + PIECES_PER_SIDE]; //need to adjust down and
                 //right if you take empty out of pieces array by - 1
 
                 break;
-            case 'left':
+            case LEFT:
                 piece = this.piecesArray[emptyIndex + 1];
                 break;
-            case 'right':
+            case RIGHT:
                 piece = this.piecesArray[emptyIndex - 1];
                 break;
         }
-        piece.animate(direction);
+        // setTimeout(() => {
+            piece.animate(direction, true);
+        // }, 100);
+    }
+
+    shuffleBoard(moves) {
+        this.moves = moves;
+        this.makeRandomMove();
+        this.moves --;
+    
+    }
+
+    continueShufflingBoard() {
+        if (this.moves > 0) {
+            this.moves --;
+            this.makeRandomMove();
+        } else {
+            game.message.hide();
+        }
     }
 
     solve() {

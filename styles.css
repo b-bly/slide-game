@@ -6,6 +6,7 @@
 #canvasDiv {
     display: flex;
     justify-content: center;
+    cursor: pointer;
 }
 
 .container {
@@ -16,4 +17,32 @@
 
 #boardSize {
     width: 40px;
+}
+
+body {
+    background-color: rgb(241, 241, 241);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#message {
+    font-size: 25px;
+    width: 90%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    opacity: .8;
+    height: 50px;
+}
+
+#messageContainer {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

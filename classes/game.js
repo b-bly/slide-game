@@ -2,7 +2,7 @@ class Game {
     context;
     constructor() {
         this.canvas = document.createElement("canvas");
-        this.canvas.id = 'canvas';
+        this.canvas.setAttribute('id', 'canvas');
         this.initialize();
 
     }
@@ -18,6 +18,7 @@ class Game {
 
         this.canvasDiv = document.getElementById('canvasDiv');
         this.canvasDiv.appendChild(this.canvas);
+        this.message = new Message();
 
         // if settings used to start game, then uncomment this
         if (USER_DECIDES_SETTINGS) {
@@ -58,6 +59,10 @@ class Game {
         this.interval = setInterval(() => {
             if (this.paused === false) { this.updateGame(); }
         }, UPDATE_RATE);
+        setTimeout(() => {
+            this.gameBoard.shuffleBoard(SHUFFLE_MOVES);
+            this.message.show();
+        }, 1000);
     }
 
     clear() {

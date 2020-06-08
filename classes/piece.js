@@ -55,16 +55,16 @@ class Piece {
                 piece[1] == emptyPiece.y) { //game.gameBoard.emptySquare.y) {
                 switch (i) {
                     case 0:
-                        isEmpty = 'left';
+                        isEmpty = LEFT;
                         break;
                     case 1:
-                        isEmpty = 'top';
+                        isEmpty = UP;
                         break;
                     case 2:
-                        isEmpty = 'right';
+                        isEmpty = RIGHT;
                         break;
                     case 3:
-                        isEmpty = 'bottom';
+                        isEmpty = DOWN;
                         break;
                     default:
                         break;
@@ -74,45 +74,49 @@ class Piece {
         return isEmpty;
     }
 
-    animate(direction) {
-        // console.log('piece.animate, direction: ');
-        // console.log(direction);
+    animate(direction, shuffling) {
+
+        let factor = 1;
         let dx = 0;
         let dy = 0;
         const pieceX = this.x;
         const pieceY = this.y;
         const pieceIndex = this.index;
+        if (shuffling === true) { factor = DELTA_FACTOR; }
         
         switch (direction) {
-            case 'left':
-                dx = -1;
-                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex);
+            case LEFT:
+                dx = -1 * factor;
+                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex, shuffling);
                 break;
-            case 'top':
-                dy = -1;
-                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex);
+            case UP:
+                dy = -1 * factor;
+                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex, shuffling);
                 break;
-            case 'right':
-                dx = 1;
-                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex);
+            case RIGHT:
+                dx = 1 * factor;
+                this.animateXorY('x', dx, dy, pieceX, pieceY, pieceIndex, shuffling);
                 break;
-            case 'bottom':
-                dy = 1;
-                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex);
+            case DOWN:
+                dy = 1 * factor;
+                this.animateXorY('y', dx, dy, pieceX, pieceY, pieceIndex, shuffling);
                 break;
             default:
                 break;
         }
         
     }
-    animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex) {
+    animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex, shuffling) {
         
         //console.log('piece.animate emptySquare: ')
         //console.log(game.gameBoard.emptySquare);
-        for (let i = 0; i < PIECE_WIDTH + PIECE_MARGIN; i++) { 
+
+        let MOVES = (PIECE_WIDTH + PIECE_MARGIN);
+        if (shuffling) MOVES = MOVES / DELTA_FACTOR;
+
+        for (let i = 0; i < MOVES; i++) { 
             setTimeout(() => {
                 xy == 'x'? this.x += dx : this.y += dy;
-    
                 game.clear();
                 game.gameBoard.draw();
 
@@ -120,15 +124,17 @@ class Piece {
                 //last time through - update variables
                 //need to update these variables here so that winner! message doesn't get
                 //displayed until animation is done.
-
-                if (i == PIECE_WIDTH + PIECE_MARGIN - 1) {
+                if (i === MOVES - 1) {
                     game.paused = false;
                     this.index = game.gameBoard.emptySquare.index;        
                     game.gameBoard.emptySquare.x = pieceX;
                     game.gameBoard.emptySquare.y = pieceY;
                     game.gameBoard.emptySquare.index = pieceIndex;
+                    setTimeout(() => {
+                        if (shuffling === true) { game.gameBoard.continueShufflingBoard(); }
+                    }, 200);
                 }
-            }, 10 * i); //animation rate ms
+            }, ANIMATION_RATE * i); //animation rate ms
         }
         
     }
@@ -152,6 +158,7 @@ class Piece {
 }
 
 //copied from https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     if (typeof stroke == 'undefined') {
       stroke = true;
