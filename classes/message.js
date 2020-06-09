@@ -2,7 +2,10 @@ class Message {
   message;
   messageContainer
   messageWidth = (PIECE_WIDTH * PIECES_PER_SIDE) + (PIECE_MARGIN * (PIECES_PER_SIDE - 1));
-  constructor() {
+  text = '';
+
+  constructor(text) {
+    this.text = text;
     this.initialize();
 
   }
@@ -10,7 +13,7 @@ class Message {
   initialize() {
     this.message = document.createElement('div');
     this.message.setAttribute('id', 'message');
-    this.message.innerHTML = 'Shuffling...';
+    this.message.innerHTML = this.text;
     this.message.classList.add('hidden');
     // this.message.style.width = this.messageWidth + 'px';
     // this.message.style.height = this.messageWidth + 'px';
@@ -22,6 +25,11 @@ class Message {
     this.canvasDiv = document.getElementById('canvasDiv');
     this.canvasDiv.appendChild(this.messageContainer);
     this.messageContainer.appendChild(this.message);
+  }
+
+  setText(text) {
+    this.text = text;
+    this.message.innerHTML = this.text;
   }
 
   show() {

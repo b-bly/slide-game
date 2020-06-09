@@ -14,18 +14,19 @@ class Game {
         this.y = false;
         this.key = false;
         this.paused = false;
+        this.adminPaused = false;
         this.context = this.canvas.getContext("2d");
 
         this.canvasDiv = document.getElementById('canvasDiv');
         this.canvasDiv.appendChild(this.canvas);
-        this.message = new Message();
+        this.message = new Message('Shuffling');
 
         // if settings used to start game, then uncomment this
         if (USER_DECIDES_SETTINGS) {
             this.settings = new Settings();
         } else {
             // setTimeout(() => {
-                this.start();
+            this.start();
             // }, 1000);
         }
     }
@@ -55,14 +56,16 @@ class Game {
             }
         })
         this.gameBoard = new Board(PIECES_PER_SIDE);
-
         this.interval = setInterval(() => {
-            if (this.paused === false) { this.updateGame(); }
+            if (this.paused === false && this.adminPaused == false) { this.updateGame(); }
         }, UPDATE_RATE);
+        this.message.setText('Shuffling');
+        this.message.show();
+        this.adminPaused = true;
         setTimeout(() => {
             this.gameBoard.shuffleBoard(SHUFFLE_MOVES);
-            this.message.show();
-        }, 1000);
+            // unpaused in gameBoard
+        }, 500);
     }
 
     clear() {
@@ -70,20 +73,22 @@ class Game {
     }
 
     checkIfWon() {
-        //sort based on index
-        this.gameBoard.piecesArray.sort((a, b) => {
-            return a.index - b.index;
-        });
+        this.gameBoard.sortBoard()
+        let emptyAdjustment = 0;
+        let previous = null;
         for (let i = 0; i < this.gameBoard.piecesArray.length; i++) {
             const number = this.gameBoard.piecesArray[i].number;
             const piece = this.gameBoard.piecesArray[i];
-            //don't need to check empty square
-            if (piece.empty == false) {
-                if (i + 1 !== number) {
-                    return 0; //at least one pair of pieces is out of order
-                    // 0 = not won yet
-                }
+            // let previous = i > 0 ? this.gameBoard.piecesArray[i - 1] : null;
+            if (piece.empty === true) { emptyAdjustment = -1; }
+            let correctNumber = i + 1 + emptyAdjustment;
+            if (previous !== null) {
+                if (previous.empty === true && i > 1) {
+                    previous = this.gameBoard.piecesArray[i - 2];
+                } 
+                if (number !== correctNumber) { return 0; }
             }
+            previous = i > 0 ? this.gameBoard.piecesArray[i - 1] : null;
         }
         return 1; // = won
     }
@@ -98,34 +103,19 @@ class Game {
         }
 
         //click on tile event: move tiles
-        this.gameBoard.piecesArray.forEach((piece, i) => {
-            if (piece.clicked() == true &&
-                piece.empty == false) {
-                // console.log('emptySquare: ');
-                // console.log(this.gameBoard.emptySquare);
-                // console.log('piece clicked x: ', piece.x, 'y: ', piece.y);
-                // console.log('empty x: ', this.gameBoard.emptySquare.x, 'y: ', this.gameBoard.emptySquare.y);
-                const direction = piece.isNextToEmpty(this.gameBoard.emptySquare);
-                if (direction != false) {
-                    //animate move
-                    this.paused = true;
-                    piece.animate(direction);
-
-                }
-            }
-
-        });
+        this.gameBoard.moveClickedPieces();
         //this.text = new Text('Slide puzzle', 110, 40, '30px Ariel', 'black');
         if (this.checkIfWon() == 1) {
             //won message
             this.clear();
             const centerx = this.canvas.width / 2;
             const centery = this.canvas.width / 2;
-            this.message = new Text('Winner!', centerx, centery, '20px Ariel', 'black');
+            this.message.setText('Winner!');
+            this.message.show(); // Text('Winner!', centerx, centery, '20px Ariel', 'black');
             clearInterval(this.interval);
             setTimeout(() => {
                 this.clear();
-
+                this.message.hide();
                 if (USER_DECIDES_SETTINGS === true) {
                     this.settings.mount();
                 } else {

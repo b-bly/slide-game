@@ -5,20 +5,20 @@ class Board {
     twoDPiecesArray = [];
     totalPieces = Math.pow(PIECES_PER_SIDE, 2);
     emptyNumber = 0;
-   
+
     constructor() {
         this.create();
-        this.drawIfGameIsReady();  
+        this.drawIfGameIsReady();
     }
 
     // May be unsolvable
     getRandomBoardArray() {
         // might make unsolvable board
-        
+
         const randomArray = [];
         this.emptyNumber = Math.floor(Math.random() * this.totalPieces);
 
-        for (let i = 0; i < this.totalPieces; i++) { 
+        for (let i = 0; i < this.totalPieces; i++) {
             let rand = Math.floor(Math.random() * (this.totalPieces - 1)) + 1;
             while (randomArray.includes(rand)) {
                 rand = Math.floor(Math.random() * (this.totalPieces - 1)) + 1;
@@ -34,16 +34,15 @@ class Board {
         for (let i = 0; i < arrLength; i++) {
             piecesArray = this.makeRandomChangeToPiecesArray(piecesArray);
         }
-        console.log(piecesArray);
         return piecesArray;
     }
 
     getBoardArrayInOrder() {
         const orderedArray = [];
-        for (let i = 0; i < this.totalPieces; i++) { 
+        for (let i = 0; i < this.totalPieces; i++) {
             orderedArray.push(i);
         }
-        return orderedArray.reverse();
+        return orderedArray;
     }
 
     create() {
@@ -61,7 +60,7 @@ class Board {
                 const y = (PIECE_WIDTH + PIECE_MARGIN) * j + BOARD_MARGIN_Y;
                 const x = (i * (PIECE_WIDTH + PIECE_MARGIN));
                 const number = randomArray.shift(); // pop
-                const empty =  number === 0; // (j * PIECES_PER_SIDE + i) == this.emptyNumber;
+                const empty = number === 0; // (j * PIECES_PER_SIDE + i) == this.emptyNumber;
                 const index = i + j * PIECES_PER_SIDE;
                 if (empty) {
                     this.emptySquare = new Piece(PIECE_WIDTH, PIECE_WIDTH, PIECE_COLOR,
@@ -133,7 +132,7 @@ class Board {
                 pieceToMoveIndex = emptyIndex - 1;
                 break;
             default:
-            throw new Error('No piece to move.');
+                throw new Error('No piece to move.');
         }
         const pieceNumber = boardArray[pieceToMoveIndex];
         // assign empty to moving piece
@@ -166,7 +165,6 @@ class Board {
         if (emptyY < PIECES_PER_SIDE - 1) possibleMoves.push(UP);
         if (emptyX > 0) possibleMoves.push(RIGHT);
         if (emptyX < PIECES_PER_SIDE - 1) possibleMoves.push(LEFT);
-        // console.log(possibleMoves);
 
         //assign random move
 
@@ -190,24 +188,50 @@ class Board {
                 break;
         }
         // setTimeout(() => {
-            piece.animate(direction, true);
+        this.movePiece(piece, direction, true);
         // }, 100);
     }
 
     shuffleBoard(moves) {
         this.moves = moves;
         this.makeRandomMove();
-        this.moves --;
-    
+        this.moves--;
+
     }
 
     continueShufflingBoard() {
         if (this.moves > 0) {
-            this.moves --;
+            this.moves--;
+            this.makeRandomMove();
+        } else if (game.checkIfWon() == 1) {
             this.makeRandomMove();
         } else {
             game.message.hide();
+            game.adminPaused = false;
         }
+    }
+
+    sortBoard() {
+        this.piecesArray.sort((a, b) => {
+            return a.index - b.index;
+        });
+    }
+
+    moveClickedPieces() {
+        this.piecesArray.forEach((piece, i) => {
+            if (piece.clicked() == true &&
+                piece.empty == false) {
+                const direction = piece.isNextToEmpty(this.emptySquare);
+                if (direction != false) {
+                    this.movePiece(piece, direction, false);
+                }
+            }
+        });
+    }
+
+    movePiece(piece, direction, shuffle) {
+        piece.animate(direction, shuffle);
+        this.sortBoard();
     }
 
     solve() {

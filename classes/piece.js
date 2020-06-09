@@ -26,7 +26,6 @@ class Piece {
             this.click = false;
         }
         if (this.click) {
-            //console.log('clicked!');
             game.x = false;
             game.y = false;
         }
@@ -75,7 +74,7 @@ class Piece {
     }
 
     animate(direction, shuffling) {
-
+        game.paused = true;
         let factor = 1;
         let dx = 0;
         let dy = 0;
@@ -107,10 +106,7 @@ class Piece {
         
     }
     animateXorY(xy, dx, dy, pieceX, pieceY, pieceIndex, shuffling) {
-        
-        //console.log('piece.animate emptySquare: ')
-        //console.log(game.gameBoard.emptySquare);
-
+    
         let MOVES = (PIECE_WIDTH + PIECE_MARGIN);
         if (shuffling) MOVES = MOVES / DELTA_FACTOR;
 
@@ -120,7 +116,6 @@ class Piece {
                 game.clear();
                 game.gameBoard.draw();
 
-                //console.log('piece.animate for loop');
                 //last time through - update variables
                 //need to update these variables here so that winner! message doesn't get
                 //displayed until animation is done.
